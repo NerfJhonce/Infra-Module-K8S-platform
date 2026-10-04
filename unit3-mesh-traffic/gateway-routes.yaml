@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: devagents-gateway
+  namespace: devagents-dev
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: devagents-routes
+  namespace: devagents-dev
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - devagents-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/v1/agents
+    route:
+    - destination:
+        host: agent-service.devagents-dev.svc.cluster.local
+        port:
+          number: 8080

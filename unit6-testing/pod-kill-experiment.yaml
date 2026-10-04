@@ -1,0 +1,13 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: agent-pod-failure-test
+  namespace: devagents-dev
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces:
+      - devagents-dev
+  scheduler:
+    cron: '@every 2m'
